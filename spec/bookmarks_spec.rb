@@ -1,8 +1,18 @@
 require 'bookmarks'
+require 'spec_helper'
 
-RSpec.describe Bookmarks do
+describe '.all' do
   it 'shows an array of bookmarks' do
-  subject = Bookmarks.all
-  expect(subject).to include("http://www.google.com")
+    connection = PG.connect(dbname: 'bookmark_manager_test')
+
+    connection.exec("INSERT INTO bookmarks (url) VALUES ('http://www.makersacademy.com');")
+    connection.exec("INSERT INTO bookmarks (url) VALUES('http://www.destroyallsoftware.com');")
+    connection.exec("INSERT INTO bookmarks (url) VALUES('http://www.google.com');")
+
+   bookmarks = Bookmark.all
+   expect(bookmarks).to include('http://www.makersacademy.com')
+   expect(bookmarks).to include('http://www.destroyallsoftware.com')
+   expect(bookmarks).to include("http://www.google.com")
+
   end
 end
