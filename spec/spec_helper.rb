@@ -1,4 +1,4 @@
-#require_relative './setup_test_database'
+require 'setup_test_database'
 require 'capybara'
 require 'capybara/rspec'
 require 'rspec'
@@ -7,9 +7,7 @@ ENV['ENVIRONMENT'] = 'test'
 
 RSpec.configure do |config|
   config.before(:each) do
-    p "Setting up test database..."
-    connection = PG.connect(dbname: 'bookmark_manager_test')
-    connection.exec("TRUNCATE bookmarks;")
+    setup_test_database
   end
 end
 
