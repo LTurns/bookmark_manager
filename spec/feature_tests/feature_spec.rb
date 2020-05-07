@@ -1,3 +1,4 @@
+require 'spec_helper'
 require 'pg'
 
 feature 'shows hello world on page' do
@@ -23,5 +24,16 @@ feature 'Add new bookmark' do
     fill_in('title', with: 'Test Bookmark')
     click_button('Submit')
     expect(page).to have_link('Test Bookmark', href: 'http://testbookmark.com')
+  end
+end
+
+feature 'Delete a bookmark' do
+  scenario 'Click button to remove bookmark' do
+    Bookmark.create(url: 'http://www.makersacademy.com', title: 'Makers Academy')
+    visit('/bookmarks')
+    expect(page).to have_link('Makers Academy', href: 'http://www.makersacademy.com')
+    first('.bookmark').click_button 'Delete'
+    expect(current_path).to eq '/bookmarks/:id'
+    expect(page).not_to have_link('Makers Academy', href: 'http://www.makersacademy.com')
   end
 end
